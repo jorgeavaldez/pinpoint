@@ -1,4 +1,4 @@
-import { createFileRoute, useRouter } from "@tanstack/react-router";
+import { createFileRoute } from "@tanstack/react-router";
 import { createServerFn } from "@tanstack/react-start";
 
 const getCount = createServerFn({ method: "GET" }).handler(() => {
@@ -11,7 +11,6 @@ export const Route = createFileRoute("/")({
 });
 
 function Home() {
-	const router = useRouter();
 	const state = Route.useLoaderData()
 
 	return (
