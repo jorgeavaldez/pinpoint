@@ -10,6 +10,7 @@ import {
 
 import type { Route } from "./+types/root";
 import "./app.css";
+import { useState } from "react";
 
 const queryClient = new QueryClient();
 
@@ -36,9 +37,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
 				<Links />
 			</head>
 			<body>
-				<QueryClientProvider client={queryClient}>
-					{children}
-				</QueryClientProvider>
+				{children}
 				<ScrollRestoration />
 				<Scripts />
 			</body>
@@ -47,7 +46,23 @@ export function Layout({ children }: { children: React.ReactNode }) {
 }
 
 export default function App() {
-	return <Outlet />;
+	const [queryClient] = useState(
+		() =>
+			new QueryClient({
+				defaultOptions: {
+					queries: {
+						// With SSR, we usually want to set some default staleTime
+						// above 0 to avoid refetching immediately on the client
+						staleTime: 60 * 1000,
+					},
+				},
+			}),
+	);
+	return (
+		<QueryClientProvider client={queryClient}>
+			<Outlet />
+		</QueryClientProvider>
+	);
 }
 
 export function ErrorBoundary({ error }: Route.ErrorBoundaryProps) {
