@@ -1,3 +1,4 @@
+import { Button } from "@/components/ui/button";
 import { createFileRoute } from "@tanstack/react-router";
 import { createServerFn } from "@tanstack/react-start";
 
@@ -17,6 +18,7 @@ function Home() {
 		<div>
 			<h1>Home</h1>
 			<p>Count: {state.count}</p>
+			<Button>click me</Button>
 		</div>
 	);
 }
