@@ -27,13 +27,10 @@ function Home() {
 	});
 
 	return (
-		<div>
+		<main>
 			<h1>Home</h1>
 			<p>Count: {state.count}</p>
-			<Button
-				onClick={() => mutate()}
-				disabled={isPending}
-			>
+			<Button onClick={() => mutate()} disabled={isPending}>
 				{isPending ? "Locating..." : "Get My Location"}
 			</Button>
 			{coords && (
@@ -42,6 +39,6 @@ function Home() {
 					<p>Longitude: {coords.coords.longitude.toFixed(5)}</p>
 				</div>
 			)}
-		</div>
+		</main>
 	);
 }
