@@ -1,13 +1,19 @@
 {
-  "name": "pinpoint",
-  "module": "index.ts",
-  "type": "module",
-  "private": true,
-  "workspaces": ["packages/*", "apps/*"],
-  "devDependencies": {
-    "@types/bun": "latest"
-  },
-  "peerDependencies": {
-    "typescript": "^5"
-  }
+	"name": "pinpoint",
+	"module": "index.ts",
+	"type": "module",
+	"private": true,
+	"scripts": {
+		"lint": "biome check .",
+		"format": "biome check . --write"
+	},
+	"workspaces": ["packages/*", "apps/*"],
+	"devDependencies": {
+		"@biomejs/biome": "^1.9.4",
+		"@types/bun": "latest"
+	},
+	"peerDependencies": {
+		"typescript": "^5"
+	},
+	"trustedDependencies": ["@biomejs/biome"]
 }
