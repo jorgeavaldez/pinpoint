@@ -7,7 +7,11 @@
 	},
 	"files": {
 		"ignoreUnknown": false,
-		"ignore": ["**/*/.react-router/*"]
+		"ignore": [
+			"**/*/.react-router/*",
+			"**/*/routeTree.gen.ts",
+			"apps/frontend/app/styles/app.css"
+		]
 	},
 	"formatter": {
 		"enabled": true,

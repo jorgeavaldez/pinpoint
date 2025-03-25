@@ -1,8 +1,9 @@
 import sb from "@mapbox/search-js-core";
-import { Button } from "@/components/ui/button";
+import { useQuery } from "@tanstack/react-query";
 import { createFileRoute } from "@tanstack/react-router";
 import { createServerFn, useServerFn } from "@tanstack/react-start";
-import { useQuery } from "@tanstack/react-query";
+import { Link, Phone } from "lucide-react";
+import { Suspense, lazy } from "react";
 import { z } from "zod";
 
 const SearchInputSchema = z.object({
@@ -20,8 +21,11 @@ const getLocationPoints = createServerFn({ method: "GET" })
 				"pk.eyJ1IjoiZGVsdmF6ZSIsImEiOiJjbThuMWtucGgxa2YzMmxweHZrNjZuNm1sIn0.2gjk3rH2em5ha1p8Gzb5nw",
 		});
 		try {
-			const res = await searchbox.reverse(ctx.data);
-			return res;
+			const res = await searchbox.reverse(`${ctx.data.lon},${ctx.data.lat}`);
+			const pois = res.features.filter(
+				(x) => x.properties.feature_type === "poi",
+			);
+			return pois;
 		} catch (error) {
 			console.error("SearchBox API Error:", error);
 			throw new Error("Failed to fetch location data");
@@ -32,14 +36,17 @@ export const Route = createFileRoute("/")({
 	component: Home,
 });
 
+const MapGui = lazy(() => import("@/components/map"));
+
+/*
+ *
+ *28.03 82.30
+ *
+ */
+
 function Home() {
 	const getLocPoints = useServerFn(getLocationPoints);
-	const {
-		data: coords,
-		isLoading: isCoordsLoading,
-		refetch: fetchCoords,
-	} = useQuery({
-		enabled: false,
+	const { data: coords } = useQuery({
 		queryKey: ["coords"],
 		queryFn: () =>
 			new Promise<GeolocationPosition>((resolve, reject) => {
@@ -47,12 +54,8 @@ function Home() {
 			}),
 	});
 
-	const {
-		data: points,
-		isLoading: isPointsLoading,
-		refetch: fetchPoints,
-	} = useQuery({
-		enabled: false,
+	const { data: points } = useQuery({
+		enabled: !!coords,
 		queryKey: ["points", coords?.coords.latitude, coords?.coords.longitude],
 		queryFn: () =>
 			getLocPoints({
@@ -64,32 +67,66 @@ function Home() {
 	});
 
 	return (
-		<main>
-			<h1>Home</h1>
-			<Button
-				onClick={() => fetchCoords()}
-				disabled={isCoordsLoading}
-				type="button"
-			>
-				{isCoordsLoading ? "Locating..." : "Get My Location"}
-			</Button>
-
-			<Button
-				onClick={() => fetchPoints()}
-				disabled={isPointsLoading && !coords}
-				type="button"
-			>
-				{isPointsLoading ? "fetching points..." : "Get points"}
-			</Button>
-
+		<main className="h-screen">
+			<Suspense fallback={<div>Loading...</div>}>
+				{coords && points && (
+					<div className="h-2/3">
+						<MapGui coords={coords} points={points} />
+					</div>
+				)}
+			</Suspense>
 			{coords && (
-				<pre className="mt-4 space-y-2">
-					<p>Latitude: {coords.coords.latitude.toFixed(5)}</p>
-					<p>Longitude: {coords.coords.longitude.toFixed(5)}</p>
-				</pre>
+				<div className="p-4">
+					<span className="font-bold text-lg">Location: </span>
+					<span>
+						{coords.coords.latitude.toFixed(5)},{" "}
+						{coords.coords.longitude.toFixed(5)}
+					</span>
+				</div>
 			)}
 
-			{points && <pre>{JSON.stringify(points, null, 2)}</pre>}
+			<ul>
+				{points?.map((x) => (
+					<li className="border border-gray-200 p-4 flex flex-col" key={x.id}>
+						<p className="font-bold text-lg">{x.properties.name}</p>
+						<div className="flex flex-col gap-1 mb-2">
+							<div className="flex flex-col">
+								<p>{x.properties.address}</p>
+								<p>{x.properties.place_formatted}</p>
+							</div>
+							<div className="flex flex-row gap-8">
+								{"website" in x.properties.metadata && (
+									<p>
+										<Link className="inline-block mr-2" size={16} />
+										<a
+											href={x.properties.metadata.website}
+											target="_blank"
+											rel="noreferrer"
+											className="underline text-primary"
+										>
+											{x.properties.metadata.website}
+										</a>
+									</p>
+								)}
+								{"phone" in x.properties.metadata && (
+									<p>
+										<Phone className="inline-block mr-2" size={16} />
+										<a
+											href={`tel:${x.properties.metadata.phone}`}
+											type="tel"
+											target="_blank"
+											rel="noreferrer"
+											className="underline text-primary"
+										>
+											{x.properties.metadata.phone}
+										</a>
+									</p>
+								)}
+							</div>
+						</div>
+					</li>
+				))}
+			</ul>
 		</main>
 	);
 }
