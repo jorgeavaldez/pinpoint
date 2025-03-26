@@ -2,5 +2,5 @@
 node = ['prefix:22']
 bun = "1.2.4"
 
-# [[env]]
-# _.file = { path = ".env", tools = true }
+[[env]]
+_.file = { path = ".env" }
