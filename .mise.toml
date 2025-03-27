@@ -3,4 +3,10 @@ node = ['prefix:22']
 bun = "1.2.4"
 
 [[env]]
+# PGHOST = { value = "{{exec(command='op read \"op://Private/homelab pgsql/server\"')}}", tools = true }
+# PGPORT = { value = "{{exec(command='op read \"op://Private/homelab pgsql/port\"')}}", tools = true }
+# PGUSER = { value = "{{exec(command='op read \"op://Private/homelab pgsql/username\"')}}", tools = true }
+# PGPASSWORD = { value = "{{exec(command='op read \"op://Private/homelab pgsql/password\"')}}", tools = true, redact = true }
+# PGDATABASE = "pinpoint"
 _.file = { path = ".env" }
+
