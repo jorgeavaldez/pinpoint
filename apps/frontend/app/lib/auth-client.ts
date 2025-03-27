@@ -7,8 +7,4 @@ export const authClient = createAuthClient({
 	plugins: [passkeyClient()],
 });
 
-const data = await authClient.signUp.email({
-    name: "",
-    email: "",
-    password: ""
-})
+// const data = await authClient.passkey.addPasskey()

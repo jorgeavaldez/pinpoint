@@ -5,6 +5,9 @@
 	"exports": {
 		".": "./src/index.ts"
 	},
+	"scripts": {
+		"better-auth:schema": "bunx @better-auth/cli generate --config ../../apps/frontend/app/lib/auth.ts"
+	},
 	"devDependencies": {
 		"@types/bun": "latest",
 		"@types/pg": "^8.11.11",

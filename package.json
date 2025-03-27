@@ -9,6 +9,7 @@
 	},
 	"private": true,
 	"scripts": {
+		"dev": "bun run -F @pinpoint/frontend dev",
 		"lint": "biome check .",
 		"format": "biome check . --write"
 	},
