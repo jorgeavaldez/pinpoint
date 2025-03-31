@@ -48,6 +48,7 @@ const MapGui = lazy(() => import("@/components/map"));
 function Home() {
 	const { data: session, isPending: sessionIsPending } =
 		authClient.useSession();
+
 	const getLocPoints = useServerFn(getLocationPoints);
 	const { data: coords } = useQuery({
 		queryKey: ["coords"],
