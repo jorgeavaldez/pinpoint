@@ -1,12 +1,5 @@
 {
 	"name": "pinpoint",
-	"type": "module",
-	"private": true,
-	"scripts": {
-		"lint": "biome check .",
-		"format": "biome check . --write"
-	},
-	"workspaces": ["packages/*", "apps/*"],
 	"devDependencies": {
 		"@biomejs/biome": "^1.9.4",
 		"@types/bun": "latest"
@@ -14,5 +7,13 @@
 	"peerDependencies": {
 		"typescript": "^5"
 	},
-	"trustedDependencies": ["@biomejs/biome", "@parcel/watcher", "esbuild"]
+	"private": true,
+	"scripts": {
+		"dev": "bun run -F @pinpoint/frontend dev",
+		"lint": "biome check .",
+		"format": "biome check . --write"
+	},
+	"trustedDependencies": ["@biomejs/biome", "@parcel/watcher", "esbuild"],
+	"type": "module",
+	"workspaces": ["packages/*", "apps/*"]
 }

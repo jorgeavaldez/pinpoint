@@ -1,3 +1,4 @@
+import { authClient } from "@/lib/auth-client";
 import sb from "@mapbox/search-js-core";
 import { useQuery } from "@tanstack/react-query";
 import { createFileRoute } from "@tanstack/react-router";
@@ -45,12 +46,19 @@ const MapGui = lazy(() => import("@/components/map"));
  */
 
 function Home() {
+	const { data: session, isPending: sessionIsPending } =
+		authClient.useSession();
+
 	const getLocPoints = useServerFn(getLocationPoints);
 	const { data: coords } = useQuery({
 		queryKey: ["coords"],
 		queryFn: () =>
 			new Promise<GeolocationPosition>((resolve, reject) => {
-				navigator.geolocation.getCurrentPosition(resolve, reject);
+				navigator.geolocation.getCurrentPosition(resolve, reject, {
+					enableHighAccuracy: false,
+					timeout: 5000,
+					maximumAge: Number.POSITIVE_INFINITY,
+				});
 			}),
 	});
 
@@ -69,6 +77,17 @@ function Home() {
 	return (
 		<main className="h-screen">
 			<Suspense fallback={<div>Loading...</div>}>
+				{!sessionIsPending && session && (
+					<p className="p-4 font-bold text-sm">Welcome {session.user.name}</p>
+				)}
+			</Suspense>
+			<Suspense
+				fallback={
+					<div className="h-2/3 flex justify-center content-center items-center font-bold text-xl bg-gray-100">
+						Loading...
+					</div>
+				}
+			>
 				{coords && points && (
 					<div className="h-2/3">
 						<MapGui coords={coords} points={points} />
