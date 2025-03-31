@@ -113,7 +113,7 @@ export default function SignUp() {
 										setLoading(true);
 									},
 									onError: (ctx) => {
-										toast.error(ctx.error.message);
+										toast.error(ctx.error.message || ctx.error.name);
 									},
 									onSuccess: async () => {
 										navigate({ to: "/" });
