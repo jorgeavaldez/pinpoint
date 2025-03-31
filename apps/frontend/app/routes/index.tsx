@@ -78,7 +78,7 @@ function Home() {
 			</Suspense>
 			<Suspense
 				fallback={
-					<div className="h-2/3 flex justify-center content-center items-center font-bold text-xl">
+					<div className="h-2/3 flex justify-center content-center items-center font-bold text-xl bg-gray-100">
 						Loading...
 					</div>
 				}
