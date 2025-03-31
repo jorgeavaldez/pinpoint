@@ -6,7 +6,8 @@
 		".": "./src/index.ts"
 	},
 	"scripts": {
-		"better-auth:schema": "bunx @better-auth/cli generate --config ../../apps/frontend/app/lib/auth.ts"
+		"better-auth:schema": "bunx @better-auth/cli generate --config ../../apps/frontend/app/lib/auth.ts",
+		"db:push": "drizzle-kit push"
 	},
 	"devDependencies": {
 		"@types/bun": "latest",

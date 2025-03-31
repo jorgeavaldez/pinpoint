@@ -5,8 +5,3 @@ export const schema = {
 	...auth,
 	...locations,
 };
-
-export default {
-	...auth,
-	...locations,
-};

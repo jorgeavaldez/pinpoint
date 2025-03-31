@@ -1,8 +1,8 @@
 import { drizzle } from "drizzle-orm/node-postgres";
-import { Pool } from "pg";
-import schema from "./schema";
+import pg from "pg";
+import { schema } from "./schema";
 
-const pool = new Pool({
+const pool = new pg.Pool({
 	host: process.env.PGHOST,
 	port: Number.parseInt(process.env.PGPORT),
 	user: process.env.PGUSER,
