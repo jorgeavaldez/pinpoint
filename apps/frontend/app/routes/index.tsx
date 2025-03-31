@@ -72,9 +72,17 @@ function Home() {
 	return (
 		<main className="h-screen">
 			<Suspense fallback={<div>Loading...</div>}>
-				{!sessionIsPending && session && <p className="p-4 font-bold text-sm">Welcome {session.user.name}</p>}
+				{!sessionIsPending && session && (
+					<p className="p-4 font-bold text-sm">Welcome {session.user.name}</p>
+				)}
 			</Suspense>
-			<Suspense fallback={<div>Loading...</div>}>
+			<Suspense
+				fallback={
+					<div className="h-2/3 flex justify-center content-center items-center font-bold text-xl">
+						Loading...
+					</div>
+				}
+			>
 				{coords && points && (
 					<div className="h-2/3">
 						<MapGui coords={coords} points={points} />
