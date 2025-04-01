@@ -1,6 +1,4 @@
-"use client";
-
-import type sb from "@mapbox/search-js-core";
+import type { POI } from "@/lib/search-pois";
 import {
 	CircleMarker,
 	MapContainer,
@@ -12,7 +10,7 @@ import {
 
 type Props = {
 	coords: GeolocationPosition;
-	points: sb.SearchBoxFeatureSuggestion[];
+	points?: POI[];
 };
 
 export default function MapGui({ coords, points }: Props) {
@@ -32,12 +30,12 @@ export default function MapGui({ coords, points }: Props) {
 				<Popup>Your location</Popup>
 			</CircleMarker>
 
-			{points.map((x) => (
+			{points?.map((x) => (
 				<Marker
 					key={x.id}
 					position={[x.geometry.coordinates[1], x.geometry.coordinates[0]]}
 				>
-					<Tooltip direction="auto" permanent>
+					<Tooltip direction="auto" permanent key={x.id}>
 						{x.properties.name}
 					</Tooltip>
 				</Marker>

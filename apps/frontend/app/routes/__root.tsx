@@ -38,7 +38,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
 			],
 			scripts: [
 				{
-					src: "//localhost:8080/target.js",
+					src: "//localhost:3000/target.js",
 				},
 			],
 		}),
